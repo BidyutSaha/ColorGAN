@@ -1,0 +1,110 @@
+.img_background {
+  background-color: lightblue;
+  height: 256px;
+  width: 256px;
+}
+
+.cen_cen {
+  margin: auto;
+  /*width: 50%;*/
+  /* border: 1px solid green; */
+  padding: 10px;
+  text-align: center;
+
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cen {
+  margin: auto;
+  /*width: 50%;*/
+  /* border: 1px solid green; */
+  padding: 10px;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left {
+  /*width: 50%;*/
+  /* border: 1px solid green; */
+  padding: 10px;
+  text-align: left;
+
+  display: flex;
+  align-items: left;
+  justify-content: left;
+}
+
+.right {
+  /*width: 50%;*/
+  /* border: 1px solid green; */
+  padding: 10px;
+  text-align: right;
+
+  display: flex;
+  align-items: right;
+  justify-content: right;
+}
+/* 
+.cen_child {
+  margin: auto;
+} */
+
+.navbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.navbar {
+  background: black;
+  text-align: center;
+}
+
+.sample-image {
+  width: 100px;
+  height: 100px;
+  padding: 2px;
+}
+
+.control-title {
+  padding: 40px;
+  /* -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75); */
+}
+/* * {
+  border: dashed;
+} */
+
+.imga:hover {
+  -webkit-transform: scale(
+    1.1
+  ); /*Webkit: Scale up image to 1.2x original size*/
+  -moz-transform: scale(1.1); /*Mozilla scale version*/
+  -o-transform: scale(1.1); /*Opera scale version*/
+  box-shadow: 0px 0px 30px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
+  -webkit-box-shadow: 0px 0px 30px gray; /*Safari shadow version*/
+  -moz-box-shadow: 0px 0px 30px gray; /*Mozilla shadow version*/
+  opacity: 1;
+}
