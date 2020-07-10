@@ -29,7 +29,7 @@ function op_render() {
   img.src = img1.src;
 }
 
-api_url = "http://127.0.0.1:5000/api/colorify";
+api_url = "/api/colorify";
 
 async function submit() {
   img = document.getElementById("input-image");

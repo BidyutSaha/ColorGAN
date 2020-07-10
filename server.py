@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import re
 from skimage import color
 import matplotlib.pyplot as plt
+from flask import render_template
 
 
 import tensorflow as tf
@@ -57,8 +58,11 @@ aiColorGenerator = load_model(
 
 
 # Initialize the Flask application
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="",
+            template_folder='static', static_folder="static")
 CORS(app)
+
+# [grayscale--->lab---->L---->scalled L-----> predict--------->reverse scaleof AB---->LAB--->multiply 100--->lab2rgb---->multiply 255]
 
 
 def numpyToPNGB64(arr):
@@ -71,6 +75,11 @@ def numpyToPNGB64(arr):
         base64.b64encode(rawBytes.read()).decode("utf-8")
 
     return img_str
+
+
+@app.route("/", methods=["GET"])
+def landing():
+    return render_template("index.html")
 
 # route http posts to this method
 @app.route('/api/colorify', methods=['POST'])
