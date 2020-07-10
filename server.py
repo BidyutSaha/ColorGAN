@@ -77,9 +77,57 @@ def numpyToPNGB64(arr):
     return img_str
 
 
+def stored_samleImgColorify(imgId):
+    path = "./static/sampleImg/sample{}.png".format(imgId)
+    image_np = np.asarray(Image.open(path))
+    return image_np
+
+
+def numpyGrayToLRefBase64(grayImg_np):
+    # rgb to  lab conversion
+    lab = color.rgb2lab(grayImg_np)
+    scalled_lab = lab/100
+    l = scalled_lab[..., 0]
+    ref_img = np.dstack((l, l, l))*100*2.5
+    img_str = numpyToPNGB64(ref_img)
+    return img_str
+
+
+def numpyGrayToColorBase64(grayImg_np):
+    # rgb to  lab conversion
+
+    lab = color.rgb2lab(grayImg_np)
+    scalled_lab = lab/100
+    l = scalled_lab[..., 0]
+
+    p = aiColorGenerator.predict(
+        scalled_lab[..., 0].reshape((1, 256, 256, 1)))[0]
+
+    predicted_img = np.dstack(
+        (l, p[..., 0], p[..., 1]))*100
+
+    processed_img = color.lab2rgb(predicted_img)*255
+    img_str = numpyToPNGB64(processed_img)
+    return img_str
+
+
 @app.route("/", methods=["GET"])
 def landing():
     return render_template("index.html")
+
+
+# route http posts to this method
+@app.route('/api/sampleColorify', methods=['POST'])
+def sampleColorify():
+    imgId = request.get_json(force=True)["gray_img_id"]
+    image_np = stored_samleImgColorify(imgId)
+    img_str = numpyGrayToColorBase64(image_np)
+    ref_img_str = numpyGrayToLRefBase64(image_np)
+
+    response = jsonify({'img1': img_str, 'img2': ref_img_str})
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 # route http posts to this method
 @app.route('/api/colorify', methods=['POST'])
@@ -95,25 +143,8 @@ def colorify():
         "RGB").resize((256, 256), Image.ANTIALIAS)
     image_np = np.array(image)
 
-    # rgb to  lab conversion
-    lab = color.rgb2lab(image_np)
-
-    scalled_lab = lab/100
-    l = scalled_lab[..., 0]
-
-    ref_img = np.dstack((l, l, l))*100*2.5
-
-    p = aiColorGenerator.predict(
-        scalled_lab[..., 0].reshape((1, 256, 256, 1)))[0]
-
-    predicted_img = np.dstack(
-        (l, p[..., 0], p[..., 1]))*100
-
-    processed_img = color.lab2rgb(predicted_img)*255
-    print(processed_img.min(), processed_img.max())
-
-    ref_img_str = numpyToPNGB64(ref_img)
-    img_str = numpyToPNGB64(processed_img)
+    img_str = numpyGrayToColorBase64(image_np)
+    ref_img_str = numpyGrayToLRefBase64(image_np)
 
     response = jsonify({'img1': img_str, 'img2': ref_img_str})
     # response.headers.add('Access-Control-Allow-Origin', '*')

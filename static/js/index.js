@@ -1,8 +1,16 @@
+var isSample = false;
+var sampleId = 1;
+var api_url = "/api/colorify";
+var api_url_sample = "/api/sampleColorify";
+
 function onchange_fileSelector(event) {
+  isSample = false;
   readURL(event);
 }
 
 function sampleImage_render(e) {
+  isSample = true;
+  sampleId = e.getAttribute("tag");
   img1 = document.getElementById("input-image");
   img1.src = e.src;
 
@@ -24,23 +32,27 @@ function readURL(input) {
 
 function op_render() {
   img1 = document.getElementById("input-image");
-
   img = document.getElementById("img-col-1");
   img.src = img1.src;
 }
 
-api_url = "/api/colorify";
-
 async function submit() {
-  img = document.getElementById("input-image");
+  url = "";
+  data = null;
+  if (isSample) {
+    data = {
+      gray_img_id: sampleId,
+    };
+    url = api_url_sample;
+  } else {
+    img = document.getElementById("input-image");
+    data = {
+      gray_img: img.src,
+    };
+    url = api_url;
+  }
 
-  data = {
-    gray_img: img.src,
-  };
-
-  console.log(data);
-
-  let response = await fetch(api_url, {
+  let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -56,5 +68,3 @@ async function submit() {
   img = document.getElementById("img-col-1");
   img.src = result.img2;
 }
-
-console.log(imgs.img1);
