@@ -1,0 +1,12 @@
+Flask==1.1.1
+matplotlib==3.1.1
+Flask_Cors==3.0.8
+opencv_python==4.2.0.34
+scikit_image==0.15.0
+tensorflow_gpu==2.2.0
+~umpy==1.16.5
+jsonpickle==1.4.1
+numpy==1.19.0
+Pillow==7.2.0
+skimage==0.0
+tensorflow==2.2.0
