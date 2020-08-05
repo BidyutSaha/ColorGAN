@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Bootstrap Example</title>
+    <title>ColorGAN</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -15,92 +15,108 @@
     <script src={{url_for("static",filename="js/index.js")}}></script>
   </head>
   <body>
-    <!-- <nav class="navbar container-fluid">
-      <div class="container text-center">
-        <a class="navbar-brand text-white" href="/">
-          <span><i class="app-icon footer-link"></i>C O L O R N E T</span>
+    
+   
+    <div class="">
+      <nav class="navbar">
+        <a class="navbar-brand cen" href="#">
+          <img src={{url_for("static",filename="sampleImg/logo.png")}} alt="">
         </a>
-      </div>
-    </nav> -->
-    <div class="container-fluid">
+      </nav>
+     
       <br />
+    
       <div class="row">
-        <div class="col control-title">
-          <h4 class="whitespace">Colourise your black and white photos</h4>
-          <p>
-            <b
-              >A deep learning base autoamtic grayscale to color image
-              conversion. Mtech Final Year Project<br />
-              Bidyut Saha, Department of Computer Science and Enginerring,
-              Universiy of Calcutta</b
-            >
-          </p>
-          <br />
+        <div class="control-title cen">
+          <h4 class="whitespace"><b>ColorGAN : </b>Grayscale to Color Image Conversion using Conditional Adversarial and a novel Reconstruction Loss</h4>
+          <hr>
+          <p>A Deep Learning based Automatic grayscale to color image translation.
+          <br>
+          <i> Bidyut Saha, Department of Computer Science and Enginerring, Universiy of Calcutta</i>
+          <hr>
+      </div>
+    </div>
+      <div class="row cen">
+        <div class="col cen">
+         <div class="row cen">
           <input
-            type="file"
-            name="photo"
-            id="upload-photo"
-            accept="image/x-png,image/jpeg"
-            onchange="onchange_fileSelector(this)"
-          />
-
-          <h5 class="">
-            <br />
-            <i><b>Or, try these sample images:</b></i>
-          </h5>
-          <div id="sample_container">
-           <img src={{url_for("static",filename="sampleImg/sample1.png")}}
-              class="sample-image imga"
-              tag="1"
-              onclick="sampleImage_render(this)"
-            />
-            <img src={{url_for("static",filename="sampleImg/sample2.png")}}
-              class="sample-image imga"
-              tag="2"
-              onclick="sampleImage_render(this)"
-            />
-            <img src={{url_for("static",filename="sampleImg/sample3.png")}}
+          type="file"
+          name="photo"
+          id="upload-photo"
+          accept="image/x-png,image/jpeg"
+          onchange="onchange_fileSelector(this)"
+          
+        />
+         </div>
+         <div class="row cen">
+          <i><b>Or, try these sample images:</b></i>
+         </div>
+         <div class="row cen">
+         
+          <img src={{url_for("static",filename="sampleImg/sample1.png")}}
+          class="sample-image imga"
+          tag="1"
+          onclick="sampleImage_render(this)"
+        />
+        <img src={{url_for("static",filename="sampleImg/sample2.png")}}
+        class="sample-image imga"
+        tag="2"
+        onclick="sampleImage_render(this)"
+      />
+      <img src={{url_for("static",filename="sampleImg/sample3.png")}}
              
-              class="sample-image imga"
-              tag="3"
-              onclick="sampleImage_render(this)"
-            />
-            <img src={{url_for("static",filename="sampleImg/sample4.png")}}
+      class="sample-image imga"
+      tag="3"
+      onclick="sampleImage_render(this)"
+    />
+    <img src={{url_for("static",filename="sampleImg/sample5.png")}}
+             
+    class="sample-image imga"
+    tag="5"
+    onclick="sampleImage_render(this)"
+  />
+    <img src={{url_for("static",filename="sampleImg/sample4.png")}}
    
               class="sample-image imga"
               tag="4"
               onclick="sampleImage_render(this)"
             />
-            <img src={{url_for("static",filename="sampleImg/sample5.png")}}
-             
-              class="sample-image imga"
-              tag="5"
-              onclick="sampleImage_render(this)"
-            />
-          </div>
         </div>
-        <div class="col cen_cen" id="preview-bar">
-          <div id="img_background" class="img_background cen_cen">
-            <img
+        </div>
+        <div class="col cen">
+          <img
               id="input-image"
               src=""
-              class="img-thumbnail"
-              class="cen_child"
+              class="img_background"
+             
             />
-          </div>
+           
         </div>
       </div>
-      <br />
-      <div class="row">
-        <button class="btn btn-primary cen" onclick="submit()">Colorize</button>
+    
+     
+      <div class="row cen" id="mid">
+        <button  onclick="submit()">Colorize</button>
       </div>
+     
       <br />
       <br />
+   
+     <div class="row footer" id="footer">
+      <div class="row cen foH" id ="loading" hidden>
+        <div class="spinner foH" ></div>
+        <br>
+       <b>Please wait. Loading ...</b> 
+      </div>
 
-      <div class="row cen">
-        <img src="" id="img-col-1" class="img_background" />
+      <div class="row cen" id="result" hidden>
+        <img src="" id="img-col-1" class="img_background " />
         <img src="" id="img-col-2" class="img_background" />
       </div>
+     </div>
+
+     
+      
     </div>
   </body>
 </html>

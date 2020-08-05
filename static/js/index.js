@@ -15,6 +15,12 @@ function sampleImage_render(e) {
   img1.src = e.src;
 
   img = document.getElementById("img-col-1");
+  $("html, body").animate(
+    {
+      scrollTop: $("#mid").offset().top,
+    },
+    2000
+  );
 }
 
 function readURL(input) {
@@ -24,6 +30,12 @@ function readURL(input) {
     reader.onload = function (e) {
       img = document.getElementById("input-image");
       img.src = input_image_content_b64 = e.target.result;
+      $("html, body").animate(
+        {
+          scrollTop: $("#mid").offset().top,
+        },
+        2000
+      );
     };
 
     reader.readAsDataURL(input.files[0]);
@@ -37,6 +49,18 @@ function op_render() {
 }
 
 async function submit() {
+  $("html, body").animate(
+    {
+      scrollTop: $("#footer").offset().top,
+    },
+    2000
+  );
+  var ele_loading = document.getElementById("loading");
+  var ele_result = document.getElementById("result");
+
+  ele_loading.hidden = false;
+  ele_result.hidden = true;
+  console.log(ele_loading, ele_result);
   url = "";
   data = null;
   if (isSample) {
@@ -67,6 +91,8 @@ async function submit() {
 
   img = document.getElementById("img-col-1");
   img.src = result.img2;
+  ele_loading.hidden = true;
+  ele_result.hidden = false;
 }
 
 /**
@@ -139,6 +165,12 @@ window.addEventListener("load", function () {
           isSample = false;
           img = document.getElementById("input-image");
           img.src = imageDataBase64;
+          $("html, body").animate(
+            {
+              scrollTop: $("#mid").offset().top,
+            },
+            2000
+          );
         }
       });
     },

@@ -1,3 +1,6 @@
+
+# importing diffrent utility modules and frameworks
+import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow.keras.models import load_model
 from flask import Flask, request, Response, jsonify
@@ -13,9 +16,10 @@ import re
 from skimage import color
 import matplotlib.pyplot as plt
 from flask import render_template
+from flask_cachebuster import CacheBuster
 
 
-import tensorflow as tf
+# Handeling the Shaered GPU uses by diffrent process in the Same host
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
     try:
@@ -26,20 +30,18 @@ if gpus:
         print(e)
 
 
+# defining the user defined loss function for AI agent
 def l2(y_true, y_pred):
-
     x = K.mean(K.square(y_true-y_pred), axis=-1)
     return x
 
 
 def l1(y_true, y_pred):
-
     x = K.mean(K.abs(y_true-y_pred), axis=-1)
     return x
 
 
 def l3(y_true, y_pred):
-
     x = K.mean(K.sqrt(K.sum(K.square(y_true-y_pred), axis=-1)))
     return x
 
@@ -53,6 +55,7 @@ custom_losses = {
 }
 
 
+# defining the AI agent to colorize the given grayscale image
 aiColorGenerator = load_model(
     "./lib/aicolorgen.h5", custom_objects=custom_losses)
 
@@ -60,12 +63,24 @@ aiColorGenerator = load_model(
 # Initialize the Flask application
 app = Flask(__name__, static_url_path="",
             template_folder='static', static_folder="static")
+
+
+# handeling the CROS Browser Error in REST API invocation
 CORS(app)
 
+# image processing pipeline for generating the colored version of given gray scale image
 # [grayscale--->lab---->L---->scalled L-----> predict--------->reverse scaleof AB---->LAB--->multiply 100--->lab2rgb---->multiply 255]
 
 
 def numpyToPNGB64(arr):
+    """[Converts a numpy image to png formated image in base 64 reperesentation]
+
+    Args:
+        arr ([numpy]): [image in numpy format]
+
+    Returns:
+        [string]: [base64 version of the given numpy image]
+    """
 
     im = Image.fromarray(arr.astype("uint8"))
     rawBytes = io.BytesIO()
@@ -78,13 +93,29 @@ def numpyToPNGB64(arr):
 
 
 def stored_samleImgColorify(imgId):
+    """[retrive the sample image from sample database and returns the image in numpy array]
+
+    Args:
+        imgId ([number]): [id of the image]
+
+    Returns:
+        [numpy]: [numpy image]
+    """
     path = "./static/sampleImg/sample{}.png".format(imgId)
     image_np = np.asarray(Image.open(path))
     return image_np
 
 
 def numpyGrayToLRefBase64(grayImg_np):
-    # rgb to  lab conversion
+    """[convert a single l channel (from LAB color space) image into RGB formated grayscale image]
+
+    Args:
+        grayImg_np ([numpy]): [grayscale image]
+
+    Returns:
+        [string]: [base64 version of RGB formated grayscale image]
+    """
+
     lab = color.rgb2lab(grayImg_np)
     scalled_lab = lab/100
     l = scalled_lab[..., 0]
@@ -94,7 +125,14 @@ def numpyGrayToLRefBase64(grayImg_np):
 
 
 def numpyGrayToColorBase64(grayImg_np):
-    # rgb to  lab conversion
+    """[convert a numpy grayscasle image to a color version using A.I. Agent]
+
+    Args:
+        grayImg_np ([numpy]): [grayscale image in RGB format]
+
+    Returns:
+        [string]: [ai colored image in RGB formatted in base64 represented]
+    """
 
     lab = color.rgb2lab(grayImg_np)
     scalled_lab = lab/100
@@ -123,9 +161,7 @@ def sampleColorify():
     image_np = stored_samleImgColorify(imgId)
     img_str = numpyGrayToColorBase64(image_np)
     ref_img_str = numpyGrayToLRefBase64(image_np)
-
     response = jsonify({'img1': img_str, 'img2': ref_img_str})
-    # response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 
@@ -147,12 +183,8 @@ def colorify():
     ref_img_str = numpyGrayToLRefBase64(image_np)
 
     response = jsonify({'img1': img_str, 'img2': ref_img_str})
-    # response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 
 # start flask app
-app.run(host="0.0.0.0", port=5000)
-
-
-# https://stackoverflow.com/questions/46598607/how-to-convert-a-numpy-array-which-is-actually-a-bgr-image-to-base64-string/46599592
+app.run(host="0.0.0.0", port=5000, debug=True)
