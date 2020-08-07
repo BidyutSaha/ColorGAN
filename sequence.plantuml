@@ -1,0 +1,91 @@
+@startuml GrayScale TO Color RGB
+actor WebPage
+participant API_Gateway
+participant Colorify
+participant Base64_Agent
+
+participant RGB_Agent
+participant LAB_Agent
+participant AI_Agent
+autonumber "<b><i>##</i>. </b>"
+
+
+
+
+
+
+WebPage -> API_Gateway : Request \n with \n Grayscale
+activate API_Gateway
+' note left
+' axjaksxasjia
+' end note
+
+API_Gateway -> Colorify : Redirect \nto \nColorify \nMethod
+activate Colorify
+
+
+Colorify -> Base64_Agent : Base64\n to \nnumpy\n conversion
+activate Base64_Agent
+
+Base64_Agent -> RGB_Agent : numpy \nto \nRGB \nConversion
+deactivate Base64_Agent
+activate RGB_Agent
+
+
+RGB_Agent -> LAB_Agent : RGB\n to \nLAB \nConversion
+deactivate RGB_Agent 
+activate LAB_Agent
+
+LAB_Agent -> AI_Agent : Request\n to \npredict \nA and B \nChannel \n for\n given\n L Channel
+activate AI_Agent
+
+AI_Agent -> LAB_Agent : A and B \nChannel \n is predicted\n and \nsend
+deactivate AI_Agent
+deactivate LAB_Agent
+
+
+LAB_Agent -> LAB_Agent : Reconstruct\n LAB \n from Predicated \n  A ,B with L
+
+activate LAB_Agent
+deactivate LAB_Agent 
+
+
+LAB_Agent -> RGB_Agent : Reconstruct\n LAB \n from Predicated \n  A ,B with L
+
+activate LAB_Agent
+deactivate LAB_Agent 
+
+
+RGB_Agent -> RGB_Agent : Convert \ninto \nRGB
+
+activate RGB_Agent
+deactivate RGB_Agent 
+
+
+RGB_Agent -> Base64_Agent : Request \n to Convert \n into BASE64
+
+activate RGB_Agent
+deactivate RGB_Agent 
+
+
+Base64_Agent -> Base64_Agent : Converted  \n into BASE64
+
+activate Base64_Agent
+deactivate Base64_Agent 
+
+
+Base64_Agent -> Colorify : Nump \nto Base64  \nconversion of\n Generated Image
+activate Base64_Agent
+deactivate Base64_Agent
+
+Colorify -> API_Gateway : Color\n Image \nfor \nGiven \ngrayscale image
+deactivate Colorify
+
+API_Gateway -> WebPage : Response\n with  \nColored Image
+deactivate API_Gateway
+
+
+
+
+
+@enduml
